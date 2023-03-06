@@ -6,6 +6,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export default async function (req, res) {
+	console.log('test')
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -14,25 +15,31 @@ export default async function (req, res) {
     });
     return;
   }
+ 
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
-    res.status(400).json({
-      error: {
-        message: "Please enter a valid animal",
-      }
-    });
-    return;
-  }
+  const messages = req.body.messages || [];
+  console.log("messages: " + messages)
+
+  
+//   if (messages[messages.length-1].content.trim().length === 0) {
+//     res.status(400).json({
+//       error: {
+//         message: "Please enter a valid message",
+//       }
+//     });
+//     return;
+//   }
 
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: generatePrompt(animal),
+	console.log("try api call ")
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
       temperature: 0.6,
+	  messages
     });
-    res.status(200).json({ result: completion.data.choices[0].text });
+    res.status(200).json({ result: completion.data.choices[0].message.content });
   } catch(error) {
+	console.log(error)
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
       console.error(error.response.status, error.response.data);
@@ -48,15 +55,15 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
+// function generatePrompt(animal) {
+//   const capitalizedAnimal =
+//     animal[0].toUpperCase() + animal.slice(1).toLowerCase();
+//   return `Suggest three names for an animal that is a superhero.
 
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
-}
+// Animal: Cat
+// Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
+// Animal: Dog
+// Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
+// Animal: ${capitalizedAnimal}
+// Names:`;
+// }

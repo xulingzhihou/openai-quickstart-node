@@ -29,6 +29,9 @@
 .main .icon {
   width: 34px;
 }
+
+
+
 .main h3 {
   font-size: 32px;
   line-height: 40px;
@@ -48,6 +51,7 @@
   margin-bottom: 24px;
   outline-color: #10a37f;
 }
+
 .main ::placeholder {
   color: #8e8ea0;
   opacity: 1;
@@ -61,6 +65,17 @@
   text-align: center;
   cursor: pointer;
 }
+
+.main button {
+	background: #10a37f;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: white;
+    margin: 0 5px;
+    border-color: #10a37f;
+}
+
 .main .result {
   font-weight: bold;
   margin-top: 40px;
